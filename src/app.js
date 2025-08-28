@@ -4,11 +4,13 @@ const authRouter = require("./routes/authRouter");
 require("dotenv").config();
 var cookieParser = require("cookie-parser");
 const profileRouter = require("./routes/profileRouter");
+const notesRouter = require("./routes/NotesRouter");
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(authRouter);
 app.use(profileRouter);
+app.use(notesRouter);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
