@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../models/user");
 const authRouter = express.Router();
 const bcrypt = require("bcrypt");
+var jwt = require("jsonwebtoken");
 const { validateSignUp } = require("../utils/validator");
 
 authRouter.post("/singup", async (req, res) => {
@@ -15,9 +16,7 @@ authRouter.post("/singup", async (req, res) => {
     if (userExist) {
       throw new Error("User already Exist");
     }
-
     const passwordHash = await bcrypt.hash(password, 10);
-
     const user = new User({
       name,
       email,
@@ -45,6 +44,8 @@ authRouter.post("/login", async (req, res) => {
     if (!passwordCheck) {
       throw new Error("invalid password");
     }
+    var token = jwt.sign({ email: email }, process.env.JWT_SECRET);
+    res.cookie("token", token);
     res.json("login Successfull!");
   } catch (error) {
     res.status(400).send("ERROR " + error.message);
