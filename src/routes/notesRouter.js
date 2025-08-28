@@ -57,4 +57,33 @@ notesRouter.get("/notes/all", userAuth, async (req, res) => {
   }
 });
 
+notesRouter.put("/note/update/:noteId", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    const userId = user._id;
+    const noteId = req.params.noteId;
+    const { title, content, tag } = req.body;
+    const note = await Notes.findById(noteId);
+
+    if (!note) {
+      throw new Error("No note found");
+    }
+    if (!note.user.equals(userId)) {
+      throw new Error("Not valid note");
+    }
+    if (title) note.title = title;
+    if (content) note.content = content;
+    if (tag) note.tag = tag;
+
+    await note.save();
+    res.status(200).json({
+      success: true,
+      message: "Note Updated Successfully!",
+      note,
+    });
+  } catch (error) {
+    res.status(401).send("ERROR :" + error.message);
+  }
+});
+
 module.exports = notesRouter;
