@@ -13,12 +13,11 @@ const notesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    tag: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
+    tag: {
+      type: String,
+      trim: true,
+    },
+
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -29,5 +28,5 @@ const notesSchema = new mongoose.Schema(
   }
 );
 
-const Notes = mongoose.model("Notes",notesSchema);
-module.exports = Notes
+const Notes = mongoose.model("Notes", notesSchema);
+module.exports = Notes;
