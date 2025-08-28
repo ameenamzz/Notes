@@ -3,6 +3,7 @@ const User = require("../models/user");
 const authRouter = express.Router();
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
+var cookieSession = require("cookie-session");
 const { validateSignUp } = require("../utils/validator");
 
 authRouter.post("/singup", async (req, res) => {
@@ -50,6 +51,11 @@ authRouter.post("/login", async (req, res) => {
   } catch (error) {
     res.status(400).send("ERROR " + error.message);
   }
+});
+
+authRouter.post("/logout", async (req, res) => {
+  res.cookie("token", null, { expires: new Date(Date.now()) });
+  res.json("Singed Out successfully");
 });
 
 module.exports = authRouter;
