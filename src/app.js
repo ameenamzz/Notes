@@ -5,7 +5,14 @@ require("dotenv").config();
 var cookieParser = require("cookie-parser");
 const profileRouter = require("./routes/profileRouter");
 const notesRouter = require("./routes/NotesRouter");
+var cors = require("cors");
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(authRouter);
