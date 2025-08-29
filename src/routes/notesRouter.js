@@ -113,4 +113,36 @@ notesRouter.get("/note/view/:noteId", userAuth, async (req, res) => {
   }
 });
 
+notesRouter.delete("/note/delete/:noteId", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    const userId = user._id;
+    const noteId = req.params.noteId;
+    if (!note.user.equals(userId)) {
+      return res.status(200).json({
+        success: true,
+        message: "Invalid Note",
+        note,
+      });
+    }
+    const note = await Notes.findByIdAndDelete(noteId);
+
+    if (!note) {
+      return res.status(200).json({
+        success: true,
+        message: "Invalid Note",
+        note,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "here is your deleted note",
+      note,
+    });
+  } catch (error) {
+    throw new Error("ERROR :" + message.error);
+  }
+});
+
 module.exports = notesRouter;
