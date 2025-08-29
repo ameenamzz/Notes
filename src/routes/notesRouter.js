@@ -69,7 +69,11 @@ notesRouter.put("/note/update/:noteId", userAuth, async (req, res) => {
       throw new Error("No note found");
     }
     if (!note.user.equals(userId)) {
-      throw new Error("Not valid note");
+      return res.status(200).json({
+        success: true,
+        message: "Invalid note",
+        notes: [],
+      });
     }
     if (title) note.title = title;
     if (content) note.content = content;
@@ -83,6 +87,29 @@ notesRouter.put("/note/update/:noteId", userAuth, async (req, res) => {
     });
   } catch (error) {
     res.status(401).send("ERROR :" + error.message);
+  }
+});
+
+notesRouter.get("/note/view/:noteId", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    const userId = user._id;
+    const noteId = req.params.noteId;
+    const note = await Notes.findById(noteId);
+    if (!note.user.equals(userId)) {
+      return res.status(200).json({
+        success: true,
+        message: "Invalid note",
+        notes: [],
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Here is your selected Noted",
+      note,
+    });
+  } catch (error) {
+    res.status(400).send("ERROR :" + error.message);
   }
 });
 
