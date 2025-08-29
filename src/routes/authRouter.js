@@ -47,7 +47,11 @@ authRouter.post("/login", async (req, res) => {
     }
     var token = jwt.sign({ email: email }, process.env.JWT_SECRET);
     res.cookie("token", token);
-    res.json("login Successfull!");
+    res.json({
+      success: true,
+      message: "log in Successfull",
+      user,
+    });
   } catch (error) {
     res.status(400).send("ERROR " + error.message);
   }
