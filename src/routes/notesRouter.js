@@ -118,6 +118,9 @@ notesRouter.delete("/note/delete/:noteId", userAuth, async (req, res) => {
     const user = req.user;
     const userId = user._id;
     const noteId = req.params.noteId;
+
+    const note = await Notes.findByIdAndDelete(noteId);
+
     if (!note.user.equals(userId)) {
       return res.status(200).json({
         success: true,
@@ -125,7 +128,6 @@ notesRouter.delete("/note/delete/:noteId", userAuth, async (req, res) => {
         note,
       });
     }
-    const note = await Notes.findByIdAndDelete(noteId);
 
     if (!note) {
       return res.status(200).json({
@@ -141,7 +143,7 @@ notesRouter.delete("/note/delete/:noteId", userAuth, async (req, res) => {
       note,
     });
   } catch (error) {
-    throw new Error("ERROR :" + message.error);
+    throw new Error("ERROR :" + error.message);
   }
 });
 
